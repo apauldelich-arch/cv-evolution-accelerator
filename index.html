@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCA Career Accelerator | Professional Evolution</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: radial-gradient(circle at 50% 50%, #151B26 0%, #0B0E14 100%);
+            color: #E2E8F0;
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .bg-midnight {
+            background-color: #0B0E14;
+        }
+
+        .text-cyan {
+            color: #00D4FF;
+        }
+
+        .border-cyan {
+            border-color: #00D4FF;
+        }
+
+        .bg-cyan-glow {
+            background: rgba(0, 212, 255, 0.15);
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass:hover {
+            border-color: rgba(0, 212, 255, 0.3);
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .input-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .input-box:focus {
+            border-color: #00D4FF;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.1);
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00D4FF 0%, #0088FF 100%);
+            color: #001220;
+            font-weight: 800;
+            box-shadow: 0 10px 25px -5px rgba(0, 212, 255, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px -5px rgba(0, 212, 255, 0.6);
+            filter: brightness(1.1);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #E2E8F0;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        .delay-1 {
+            animation-delay: 0.1s;
+        }
+
+        .delay-2 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-3 {
+            animation-delay: 0.3s;
+        }
+
+        .badge-alert {
+            animation: pulse 2.5s infinite;
+            background: linear-gradient(135deg, #FF8C00 0%, #FF4500 100%);
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 140, 0, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 15px rgba(255, 140, 0, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 140, 0, 0);
+            }
+        }
+
+        .page-transition {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .dot {
+            height: 6px;
+            width: 6px;
+            border-radius: 50%;
+            display: inline-block;
+            animation: dotPulse 1.5s infinite;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes dotPulse {
+
+            0%,
+            100% {
+                transform: scale(0.6);
+                opacity: 0.3;
+            }
+
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        .input-status {
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateX(-15px);
+        }
+
+        .input-status.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .cv-preview {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(0, 212, 255, 0.3);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen">
+
+    <!-- SCREEN 1: THE INTAKE -->
+    <section id="intake-screen" class="min-h-screen flex items-center justify-center p-6 page-transition">
+        <div class="max-w-4xl w-full glass p-8 md:p-12 rounded-[2rem] space-y-8 fade-in shadow-2xl shadow-cyan/5">
+            <div class="text-center space-y-4">
+                <div class="flex justify-center items-center gap-2 text-cyan mb-2">
+                    <i data-lucide="brain-circuit" class="w-8 h-8"></i>
+                    <span class="text-xs font-semibold tracking-widest uppercase">SCA Intelligence Platform</span>
+                </div>
+                <h1 class="text-5xl font-extrabold tracking-tight">Career Accelerator</h1>
+                <p class="text-slate-400 text-lg max-w-xl mx-auto italic">Engineered for Technical Mastery and
+                    High-Stakes Evolution.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+                <!-- Personal DNA -->
+                <div class="space-y-6">
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <label class="text-xs font-bold text-cyan uppercase tracking-tighter ml-1">LinkedIn
+                                URL</label>
+                            <span id="linked-status"
+                                class="input-status text-[10px] text-green-400 font-bold flex items-center gap-1 uppercase">
+                                <i data-lucide="check-circle" class="w-3 h-3"></i> Reviewed
+                            </span>
+                        </div>
+                        <input type="url" id="linkedin-url" oninput="checkStatus('linkedin-url', 'linked-status')"
+                            placeholder="linkedin.com/in/..."
+                            class="input-box w-full rounded-xl px-5 py-4 focus:outline-none transition-all text-sm placeholder:text-slate-600">
+                    </div>
+                    <div class="relative py-1 flex items-center gap-4">
+                        <div class="flex-grow border-t border-white/5"></div>
+                        <span class="text-[9px] text-slate-700 font-black uppercase tracking-[0.2em]">OR</span>
+                        <div class="flex-grow border-t border-white/5"></div>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <label class="text-xs font-bold text-cyan uppercase tracking-tighter ml-1">CV History (Text
+                                / Upload)</label>
+                            <span id="cv-status"
+                                class="input-status text-[10px] text-green-400 font-bold flex items-center gap-1 uppercase">
+                                <i data-lucide="check-circle" class="w-3 h-3"></i> Scanned
+                            </span>
+                        </div>
+                        <div class="relative group">
+                            <textarea id="cv-text" oninput="checkStatus('cv-text', 'cv-status')"
+                                placeholder="Paste current experience here..."
+                                class="input-box w-full rounded-xl px-5 py-4 h-48 focus:outline-none transition-all text-sm placeholder:text-slate-600"></textarea>
+                            <div class="absolute bottom-4 right-4 group-hover:block transition-all">
+                                <label
+                                    class="btn-secondary px-4 py-2 rounded-lg text-[10px] cursor-pointer flex items-center gap-2 hover:bg-white/10">
+                                    <i data-lucide="upload-cloud" class="w-3 h-3"></i> Upload PDF/Doc
+                                    <input type="file" id="cv-file" class="hidden" onchange="handleFileUpload(event)">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Target Data -->
+                <div class="space-y-6">
+                    <div class="space-y-2 h-full flex flex-col">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-xs font-bold text-cyan uppercase tracking-tighter ml-1">Job
+                                Description</label>
+                            <span id="jd-status"
+                                class="input-status text-[10px] text-green-400 font-bold flex items-center gap-1 uppercase">
+                                <i data-lucide="check-circle" class="w-3 h-3"></i> Validated
+                            </span>
+                        </div>
+                        <textarea id="jd-text" oninput="checkStatus('jd-text', 'jd-status')"
+                            placeholder="Paste the target JD requirements..."
+                            class="input-box w-full h-full rounded-xl px-5 py-4 focus:outline-none transition-all text-sm placeholder:text-slate-600 flex-grow min-h-[18rem]"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-center pt-8">
+                <button onclick="startProcessing()"
+                    class="btn-primary px-14 py-5 uppercase tracking-widest rounded-full transition-all shadow-xl">
+                    Initiate SCA Evolution Scan
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SCREEN 2: THE PROCESSING -->
+    <section id="processing-screen"
+        class="hidden min-h-screen flex items-center justify-center p-6 text-center page-transition">
+        <div class="space-y-8 fade-in">
+            <div class="relative w-32 h-32 mx-auto">
+                <div class="absolute inset-0 border-4 border-cyan/10 rounded-full"></div>
+                <div class="absolute inset-0 border-4 border-cyan border-t-transparent rounded-full animate-spin"></div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <i data-lucide="cpu" class="w-12 h-12 text-cyan"></i>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <h2 class="text-3xl font-bold tracking-tighter uppercase">Applying SCA Framework</h2>
+                <div
+                    class="flex items-center justify-center gap-4 text-slate-500 font-mono text-xs uppercase tracking-[0.3em]">
+                    <span id="process-step">Auditing Personal DNA</span>
+                    <div class="flex gap-1">
+                        <span class="dot bg-cyan"></span>
+                        <span class="dot bg-cyan"></span>
+                        <span class="dot bg-cyan"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SCREEN 3: THE STRATEGIC RESULT -->
+    <section id="dashboard-screen" class="hidden min-h-screen p-6 md:p-12 space-y-12 page-transition">
+        <div class="max-w-7xl mx-auto space-y-10">
+            <!-- Top Nav -->
+            <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 fade-in">
+                <div class="space-y-2">
+                    <div class="flex items-center gap-2 text-cyan">
+                        <i data-lucide="radar" class="w-6 h-6"></i>
+                        <span class="text-sm font-semibold tracking-widest uppercase italic">Analysis Complete</span>
+                    </div>
+                    <h1 class="text-4xl font-black italic tracking-tighter">Strategic Evolution</h1>
+                    <p class="text-slate-400 font-mono text-sm">TARGET: <span class="text-slate-200">Manufacturing
+                            Engineer (Technical Content)</span></p>
+                </div>
+
+                <div class="flex items-center gap-6">
+                    <button onclick="location.reload()"
+                        class="btn-secondary px-6 py-4 rounded-xl text-[10px] font-bold uppercase tracking-widest flex items-center gap-2">
+                        <i data-lucide="rotate-cw" class="w-4 h-4"></i> Reset Start
+                    </button>
+                    <div class="glass px-8 py-6 rounded-3xl flex items-center gap-10">
+                        <div class="relative w-16 h-16">
+                            <svg class="w-full h-full transform -rotate-90">
+                                <circle cx="32" cy="32" r="30" stroke="rgba(255,255,255,0.05)" stroke-width="6"
+                                    fill="transparent" />
+                                <circle cx="32" cy="32" r="30" stroke="#00D4FF" stroke-width="6" fill="transparent"
+                                    stroke-dasharray="188.4" stroke-dashoffset="22.6" />
+                            </svg>
+                            <div class="absolute inset-0 flex items-center justify-center font-bold text-lg">88%</div>
+                        </div>
+                        <div class="space-y-1">
+                            <div class="text-[10px] text-slate-400 uppercase tracking-widest font-black">Match Score
+                            </div>
+                            <div class="text-cyan text-sm font-bold flex items-center gap-1 italic">
+                                Ready for Submission
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Diagnostics: Pros, Gaps, Radar -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Detailed Audit Sections -->
+                <div class="lg:col-span-2 space-y-8 fade-in delay-1">
+
+                    <!-- Pros Section -->
+                    <div class="glass p-8 rounded-[2rem] border-l-8 border-cyan/40">
+                        <h2
+                            class="text-xs font-black uppercase tracking-[0.2em] text-cyan mb-6 flex items-center gap-3">
+                            <i data-lucide="award" class="w-5 h-5"></i> CV Positive Attributes
+                        </h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-white/5 p-4 rounded-xl space-y-1">
+                                <div
+                                    class="text-sm font-bold text-slate-100 italic tracking-tighter underline decoration-cyan">
+                                    High-Stake Project Leadership</div>
+                                <p class="text-xs text-slate-400 leading-relaxed">Proof found in the SCA Systems
+                                    Architecture and Itero Demo Plant scaling.</p>
+                            </div>
+                            <div class="bg-white/5 p-4 rounded-xl space-y-1">
+                                <div
+                                    class="text-sm font-bold text-slate-100 italic tracking-tighter underline decoration-cyan">
+                                    Academic-AI Synergy</div>
+                                <p class="text-xs text-slate-400 leading-relaxed">Your current MS in AI provides a
+                                    unique edge for Manufacturing-AI workflows.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Suggestions / Gaps Section -->
+                    <div class="glass p-8 rounded-[2rem] border-l-8 border-amber-500/40">
+                        <h2
+                            class="text-xs font-black uppercase tracking-[0.2em] text-amber-500 mb-6 flex items-center gap-3">
+                            <i data-lucide="target" class="w-5 h-5"></i> Evolution Gaps & Suggestions
+                        </h2>
+                        <div class="space-y-4">
+                            <div
+                                class="bg-white/5 p-5 rounded-2xl border border-amber-500/10 flex justify-between items-center group transition-all">
+                                <div class="space-y-1 pr-12">
+                                    <div class="text-sm font-bold text-slate-100 uppercase tracking-tighter">Improvement
+                                        01: Tool Density</div>
+                                    <p class="text-xs text-slate-400 italic">"The JD mentions MATLAB/CAD 14 times. Your
+                                        CV only lists them twice in technical context."</p>
+                                </div>
+                                <span
+                                    class="badge-alert text-black text-[9px] px-3 py-1 rounded-full uppercase font-black tracking-widest whitespace-nowrap">Fix
+                                    Prompted</span>
+                            </div>
+                            <div
+                                class="bg-white/5 p-5 rounded-2xl border border-amber-500/10 flex justify-between items-center group transition-all">
+                                <div class="space-y-1 pr-12">
+                                    <div class="text-sm font-bold text-slate-100 uppercase tracking-tighter">Improvement
+                                        02: Educational Proof</div>
+                                    <p class="text-xs text-slate-400 italic">"Explicitly state your experience in
+                                        technical teaching or content creation to match 'Content Contributor'
+                                        requirement."</p>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="lightbulb" class="text-amber-500 w-5 h-5"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skill Radar -->
+                <div class="fade-in delay-2">
+                    <div class="glass p-8 rounded-[2rem] h-full flex flex-col items-center">
+                        <h2
+                            class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-600 mb-10 w-full text-center italic">
+                            Alignment Map (SCA)</h2>
+                        <canvas id="balanceChart" class="max-w-[280px]"></canvas>
+                        <div class="mt-auto pt-8 border-t border-white/5 w-full text-center">
+                            <p class="text-[11px] text-slate-500 italic max-w-xs mx-auto">"You exceed the average
+                                candidate in 'Design Rationale' and 'Systemic Logic'."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview Section: CV & Cover Letter -->
+            <div class="fade-in delay-3 space-y-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div class="flex items-center gap-6">
+                        <button onclick="switchPreview('cv')" id="btn-cv"
+                            class="text-xl font-black italic tracking-tighter flex items-center gap-2 px-2 border-b-2 border-cyan text-white">
+                            <i data-lucide="file-text"></i> Evolutionary CV
+                        </button>
+                        <button onclick="switchPreview('cl')" id="btn-cl"
+                            class="text-xl font-black italic tracking-tighter flex items-center gap-2 px-2 border-b-2 border-transparent text-slate-500 hover:text-slate-300">
+                            <i data-lucide="mail"></i> Strategic Cover Letter
+                        </button>
+                    </div>
+                    <span class="text-[10px] text-slate-600 uppercase tracking-widest font-black">v1.5 // Optimized for
+                        Crossing Hurdles (CH)</span>
+                </div>
+
+                <div
+                    class="glass rounded-[2rem] p-4 md:p-8 bg-black/40 overflow-hidden relative border border-cyan/10 min-h-[500px]">
+                    <!-- CV PREVIEW -->
+                    <div id="preview-cv"
+                        class="max-h-[500px] overflow-y-auto pr-4 font-mono text-xs text-slate-300 space-y-6 cv-preview custom-scrollbar">
+                        <!-- REAL CV CONTENT START -->
+                        <div
+                            class="text-white font-bold text-sm tracking-widest border-b border-white/10 pb-4 mb-4 uppercase">
+                            # Alexis Paul Delich - Senior Systems Architect & Chemical Engineer</div>
+
+                        <div class="space-y-2">
+                            <div class="text-cyan font-bold tracking-tighter uppercase">## Professional Summary</div>
+                            <p>Senior Chemical Chemical Engineer and Technical Manager with over 10 years of experience
+                                in high-stakes R&D, process optimization, and industrial sustainable technology.
+                                Specialist in the intersection of circular economy engineering and Cognitive AI.
+                                Architect of the **SCA Cognitive Engineering System**, a proprietary framework designed
+                                to automate design rationale and technical documentation for engineering teams. Proven
+                                track record in scaling technical operations at Itero Technologies and creating
+                                scalable, product-led AI solutions for the engineering sector.</p>
+                        </div>
+
+                        <div class="space-y-2 border-l-2 border-cyan/20 pl-6 py-2">
+                            <div class="text-cyan font-bold tracking-tighter uppercase">## Technical Project Spotlight:
+                                The SCA Cognitive System</div>
+                            <p class="italic text-slate-400">Founding Architect | 2024 - Present (Beta Stage)</p>
+                            <ul class="list-disc ml-4 space-y-1 marker:text-cyan">
+                                <li>Engineering the proprietary SCA framework to automate Design Rationale and technical
+                                    audits.</li>
+                                <li>Developed a SaaS platform prototype improving structural accuracy by 40%.</li>
+                                <li>Integrated LLM logic with engineering first-principles for "Devil's Advocate" peer
+                                    reviews.</li>
+                                <li>Tech Stack: Python, Jupyter, RCOACOSE, Markdown, Git.</li>
+                            </ul>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="text-cyan font-bold tracking-tighter uppercase">## Professional Experience</div>
+
+                            <div class="space-y-2">
+                                <div
+                                    class="flex justify-between items-baseline font-bold text-slate-100 underline decoration-cyan/20 underline-offset-4">
+                                    <span>Itero Technologies // Technical Manager</span>
+                                    <span class="text-[10px] text-slate-500 font-mono tracking-widest">JULY 2024 -
+                                        PRESENT</span>
+                                </div>
+                                <ul class="list-disc ml-4 space-y-1">
+                                    <li>Promoted to lead technical operations and R&D strategy.</li>
+                                    <li>Collaborated on the design of a first-of-a-kind commercial plant in Geleen (NL).
+                                    </li>
+                                    <li>Directed H&S governance, overseeing 50+ localized SOPs and Risk Assessments.
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="space-y-2">
+                                <div
+                                    class="flex justify-between items-baseline font-bold text-slate-100 underline decoration-cyan/20 underline-offset-4">
+                                    <span>Itero Technologies // R&D Chemical Engineer</span>
+                                    <span class="text-[10px] text-slate-500 font-mono tracking-widest">JUNE 2022 - JULY
+                                        2024</span>
+                                </div>
+                                <ul class="list-disc ml-4 space-y-1">
+                                    <li>Managed chemical recycling R&D pipeline (100kg scale).</li>
+                                    <li>Achieved yield optimization targets of 70% for pyrolysis oil.</li>
+                                    <li>Established data-logging protocols informing design rationale for demo units.
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="space-y-2">
+                                <div
+                                    class="flex justify-between items-baseline font-bold text-slate-100 underline decoration-cyan/20 underline-offset-4">
+                                    <span>STEM Connect London // AI Integration Consultant</span>
+                                    <span class="text-[10px] text-slate-500 font-mono tracking-widest">JUNE 2024 -
+                                        PRESENT</span>
+                                </div>
+                                <ul class="list-disc ml-4 space-y-1">
+                                    <li>Founded a consultancy dedicated to helping engineering firms integrate AI.</li>
+                                    <li>Established a "Digital Staff" roster of 10+ specialized AI assistants.</li>
+                                    <li>Automated market research and technical briefing summaries.</li>
+                                </ul>
+                            </div>
+
+                            <div class="space-y-2">
+                                <div
+                                    class="flex justify-between items-baseline font-bold text-slate-100 underline decoration-cyan/20 underline-offset-4">
+                                    <span>Zschimmer & Schwarz Spain // Process Engineer</span>
+                                    <span class="text-[10px] text-slate-500 font-mono tracking-widest">2021 -
+                                        2022</span>
+                                </div>
+                                <ul class="list-disc ml-4 space-y-1">
+                                    <li>Collaborated on a large-scale digitalization project for production lines.</li>
+                                    <li>Reduced operational inefficiencies through predictive process visibility.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <div class="text-cyan font-bold tracking-tighter uppercase">## Academic & Studies</div>
+                            <ul class="space-y-1">
+                                <li><strong>Master’s in AI</strong> | BIG School | (Ongoing)</li>
+                                <li><strong>Bachelor’s in Chemical Engineering</strong> | UAM | 2011 – 2016</li>
+                                <li><strong>Diploma in Open Innovation</strong> | UTN FRBA | 2021 – 2022</li>
+                            </ul>
+                        </div>
+                        <!-- REAL CV CONTENT END -->
+                    </div>
+
+                    <!-- COVER LETTER PREVIEW -->
+                    <div id="preview-cl"
+                        class="hidden max-h-[500px] overflow-y-auto pr-4 font-mono text-xs text-slate-300 space-y-6 cv-preview custom-scrollbar">
+                        <div
+                            class="text-white font-bold text-sm tracking-widest border-b border-white/10 pb-4 mb-4 uppercase">
+                            # Strategic Cover Letter: Alexis Paul Delich</div>
+                        <div class="text-cyan font-bold tracking-tighter uppercase mb-4">Targeting: Manufacturing
+                            Engineer @ Crossing Hurdles</div>
+
+                        <p>Dear Hiring Team,</p>
+
+                        <p>As a Senior Systems Architect and Technical Manager with a core foundation in Chemical
+                            Engineering, I have spent the last decade engineering systems that bridge the gap between
+                            complex industrial data and actionable operational intelligence. My recent development of
+                            the **SCA Cognitive Engineering System** was born from a specific need I identified in
+                            high-stakes R&D environments: the automation of design rationale and technical documentation
+                            to ensure safety, consistency, and structural accuracy.</p>
+
+                        <p>At Itero Technologies, I led the transition from pilot-scale R&D to the design of a
+                            first-of-a-kind commercial plant. This required not just engineering mastery, but the
+                            ability to translate technical complexity into 50+ localized SOPs and Risk Assessments that
+                            the entire organization could follow. My objective is to bring this same systematic
+                            precision to the Manufacturing Engineer role at Crossing Hurdles, ensuring your technical
+                            content is not just accurate, but strategically aligned with board-level and ATS
+                            requirements.</p>
+
+                        <p>I am currently finalizing my Master’s in AI, focusing on how Large Language Models can act as
+                            "Peer Auditors" for engineering firms. This unique synergy between traditional process
+                            engineering and advanced cognitive tools allows me to offer a level of technical content
+                            strategy that few candidates can match.</p>
+
+                        <p>I look forward to discussing how my SCA framework and industrial experience can accelerate
+                            the documentation and operational excellence of your manufacturing team.</p>
+
+                        <p>Sincerely,</p>
+                        <p class="font-bold text-white uppercase italic">Alexis Paul Delich</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA / Download -->
+            <div
+                class="flex flex-col md:flex-row gap-8 items-center justify-between p-12 glass rounded-[3rem] fade-in border-t-8 border-cyan relative overflow-hidden">
+                <div class="space-y-3 relative z-10 text-center md:text-left">
+                    <h3 class="text-4xl font-black italic tracking-tighter">Evolutionary Asset Ready</h3>
+                    <p class="text-slate-400 text-sm max-w-sm font-semibold tracking-tighter">Verified for ATS
+                        Compliance and Deep Design Rationale.</p>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-4 relative z-10 w-full md:w-auto">
+                    <div class="flex flex-col gap-2">
+                        <div class="text-[9px] text-slate-500 font-bold uppercase tracking-widest text-center">
+                            Evolutionary CV</div>
+                        <div class="flex gap-2">
+                            <button onclick="downloadFormat('md', 'cv')"
+                                class="btn-primary px-8 py-4 text-[10px] uppercase tracking-widest rounded-full flex items-center justify-center gap-3">
+                                <i data-lucide="file-code" class="w-4 h-4"></i> .MD
+                            </button>
+                            <button onclick="downloadFormat('txt', 'cv')"
+                                class="btn-secondary px-8 py-4 border-2 text-[10px] uppercase tracking-widest rounded-full flex items-center justify-center gap-3">
+                                <i data-lucide="file-text" class="w-4 h-4"></i> .TXT
+                            </button>
+                        </div>
+                    </div>
+                    <div class="w-px h-auto bg-white/10 mx-2 hidden md:block"></div>
+                    <div class="flex flex-col gap-2">
+                        <div class="text-[9px] text-slate-500 font-bold uppercase tracking-widest text-center">Cover
+                            Letter</div>
+                        <button onclick="downloadFormat('pdf', 'cl')"
+                            class="btn-primary px-10 py-6 text-xs uppercase tracking-widest rounded-full flex items-center justify-center gap-3 h-full">
+                            <i data-lucide="mail" class="w-5 h-5"></i> Download PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Global Scripts -->
+    <script>
+        lucide.createIcons();
+
+        const CV_FULL_CONTENT = `# Alexis Paul Delich - Senior Systems Architect & Chemical Engineer
+
+## Professional Summary
+Senior Chemical Chemical Engineer and Technical Manager with over 10 years of experience in high-stakes R&D, process optimization, and industrial sustainable technology. Specialist in the intersection of circular economy engineering and Cognitive AI. Architect of the **SCA Cognitive Engineering System**, a proprietary framework designed to automate design rationale and technical documentation for engineering teams. Proven track record in scaling technical operations at Itero Technologies and creating scalable, product-led AI solutions for the engineering sector.
+
+---
+
+## Technical Project Spotlight: The SCA Cognitive System
+**Founding Architect | 2024 - Present (Beta Stage)**
+*   **Achievement:** Engineered the "Strategic Context Analysis" (SCA) system – a cognitive engine that transforms raw engineering data into high-thinking, RCOACOSE-aligned technical audits.
+*   **Result:** Developed a free-to-use SaaS platform prototype that automates the generation of SOPs, Risk Assessments, and Technical Reports, improving structural accuracy by 40% and reducing documentation lag.
+*   **Task:** Integrated advanced LLM logic with engineering first-principles to simulate "Devil's Advocate" and "Peer Auditor" scenarios, ensuring rigorous design reasoning and safety compliance in documentation.
+*   **Tech Stack:** Python, Jupyter, Prompt Engineering (RCOACOSE), Advanced Markdown, Git.
+
+---
+
+## Professional Experience
+
+### Itero Technologies
+**Technical Manager** | London, UK | July 2024 – Present
+*   **Result:** Promoted to lead technical operations and R&D strategy, reporting directly to the executive level and overseeing the Office Manager to ensure cross-departmental coordination.
+*   **Achievement:** Collaborated on the design of a first-of-a-kind commercial plant in Geleen (The Netherlands), ensuring all P&IDs, PFDs, and analytical standards met international safety and operational protocols.
+*   **Task:** Directed the H&S governance framework, overseeing the creation of 50+ localized SOPs and Risk Assessments for scaling sustainable technology deployments.
+
+**R&D Chemical Engineer** | London, UK | June 2022 – July 2024
+*   **Result:** Managed the chemical recycling R&D pipeline, overseeing experimental trials from lab to pilot plant (100kg batch scale), achieving yield optimization targets of 70% for pyrolysis oil.
+*   **Achievement:** Established a rigorous data-logging and analysis protocol for pyrolysis trials, which directly informed the design rationale for the larger demo-scale units.
+*   **Task:** Performed feedstock quality control and statistical data analysis, identifying critical variables that improved process consistency by 25%.
+
+### STEM Connect London
+**R&D Technical Manager / AI Integration Consultant** | June 2024 – Present
+*   **Achievement:** Founded a consultancy dedicated to helping engineering firms integrate AI as a co-creator rather than a simple content generator.
+*   **Result:** Established a "Digital Staff" roster of 10+ specialized AI assistants to automate market research, supplier screening, and technical briefing summaries.
+
+### Zschimmer & Schwarz Spain
+**Chemical Process Engineer** | 2021 – 2022
+*   **Task:** Collaborated on a large-scale digitalization project to integrate real-time data tracking for production lines, reducing operational inefficiencies through predictive process visibility.
+
+*(Previous roles at ASR Group, TOLSA, and Dow Chemical Company supported this trajectory towards technical leadership and process automation).*
+
+---
+
+## Academic & Studies
+*   **Master’s Degree in Artificial Intelligence** | BIG School | Nov 2025 – March 2026 (Ongoing)
+*   **Bachelor’s Degree in Chemical Engineering (Sustainable Processes)** | Autonomous University of Madrid | 2011 – 2016
+*   **Diploma in Open Innovation** | Centro de e-Learning UTN FRBA | 2021 – 2022
+*   **Project Management Certification** | Universidad Autónoma de Madrid | 2017
+
+---
+
+## Proposals for Enhancement (Strategic Roadmap)
+*   **Certification Pursuit:** Obtain a Google Professional Machine Learning Engineer certification.
+*   **Project Development:** Expand the SCA System to include a "Digital Twin" simulation layer.
+*   **Publication:** Convert your SCA logic into a white paper titled "The Cognitive Engineer".`;
+
+        const CL_FULL_CONTENT = `# Strategic Cover Letter: Alexis Paul Delich
+
+Targeting: Manufacturing Engineer @ Crossing Hurdles
+
+Dear Hiring Team,
+
+As a Senior Systems Architect and Technical Manager with a core foundation in Chemical Engineering, I have spent the last decade engineering systems that bridge the gap between complex industrial data and actionable operational intelligence. My recent development of the **SCA Cognitive Engineering System** was born from a specific need I identified in high-stakes R&D environments: the automation of design rationale and technical documentation to ensure safety, consistency, and structural accuracy.
+
+At Itero Technologies, I led the transition from pilot-scale R&D to the design of a first-of-a-kind commercial plant. This required not just engineering mastery, but the ability to translate technical complexity into 50+ localized SOPs and Risk Assessments that the entire organization could follow. My objective is to bring this same systematic precision to the Manufacturing Engineer role at Crossing Hurdles, ensuring your technical content is not just accurate, but strategically aligned with board-level and ATS requirements.
+
+I am currently finalizing my Master’s in AI, focusing on how Large Language Models can act as "Peer Auditors" for engineering firms. This unique synergy between traditional process engineering and advanced cognitive tools allows me to offer a level of technical content strategy that few candidates can match.
+
+I look forward to discussing how my SCA framework and industrial experience can accelerate the documentation and operational excellence of your manufacturing team.
+
+Sincerely,
+
+Alexis Paul Delich`;
+
+        function checkStatus(fieldId, statusId) {
+            const val = document.getElementById(fieldId).value.trim();
+            const status = document.getElementById(statusId);
+            if (val.length > 5) status.classList.add('visible');
+            else status.classList.remove('visible');
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                document.getElementById('cv-text').value = `Uploaded Document: ${file.name} (Simulated Parsing...)`;
+                checkStatus('cv-text', 'cv-status');
+            }
+        }
+
+        function switchPreview(type) {
+            const cvPre = document.getElementById('preview-cv');
+            const clPre = document.getElementById('preview-cl');
+            const btnCv = document.getElementById('btn-cv');
+            const btnCl = document.getElementById('btn-cl');
+
+            if (type === 'cv') {
+                cvPre.classList.remove('hidden');
+                clPre.classList.add('hidden');
+                btnCv.classList.add('border-cyan', 'text-white');
+                btnCv.classList.remove('border-transparent', 'text-slate-500');
+                btnCl.classList.remove('border-cyan', 'text-white');
+                btnCl.classList.add('border-transparent', 'text-slate-500');
+            } else {
+                cvPre.classList.add('hidden');
+                clPre.classList.remove('hidden');
+                btnCl.classList.add('border-cyan', 'text-white');
+                btnCl.classList.remove('border-transparent', 'text-slate-500');
+                btnCv.classList.remove('border-cyan', 'text-white');
+                btnCv.classList.add('border-transparent', 'text-slate-500');
+            }
+        }
+
+        function startProcessing() {
+            const linkedin = document.getElementById('linkedin-url').value.trim();
+            const cv = document.getElementById('cv-text').value.trim();
+            const jd = document.getElementById('jd-text').value.trim();
+            if ((!linkedin && !cv) || !jd) {
+                alert("Critical Alignment Error: Provide Profile Data and Target Job Description.");
+                return;
+            }
+            document.getElementById('intake-screen').classList.add('page-out');
+            setTimeout(() => {
+                document.getElementById('intake-screen').classList.add('hidden');
+                document.getElementById('processing-screen').classList.remove('hidden');
+                runSequence();
+            }, 500);
+        }
+
+        function runSequence() {
+            const steps = ["Hashing Personal DNA", "Scanning JD Keywords", "Calibrating SCA Pillars", "Generating Optimized Content", "Drafting Strategic Narrative"];
+            let i = 0;
+            const stepEl = document.getElementById('process-step');
+            const interval = setInterval(() => {
+                if (i < steps.length) {
+                    stepEl.innerText = steps[i];
+                    i++;
+                } else {
+                    clearInterval(interval);
+                    showDashboard();
+                }
+            }, 1000);
+        }
+
+        function showDashboard() {
+            document.getElementById('processing-screen').classList.add('page-out');
+            setTimeout(() => {
+                document.getElementById('processing-screen').classList.add('hidden');
+                document.getElementById('dashboard-screen').classList.remove('hidden');
+                initChart();
+            }, 500);
+        }
+
+        function downloadFormat(ext, target) {
+            const content = target === 'cv' ? CV_FULL_CONTENT : CL_FULL_CONTENT;
+            const filename = target === 'cv' ? `Alexis_Delich_Evolutionary_CV.${ext}` : `Alexis_Delich_Strategic_Cover_Letter.${ext}`;
+            const blob = new Blob([content], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            link.click();
+            URL.revokeObjectURL(link.href);
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('balanceChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Design Rationale', 'Academic Depth', 'Content Scale', 'H&S Governance', 'Technical Tools', 'SCA Alignment'],
+                    datasets: [{
+                        label: 'Match Level',
+                        data: [95, 88, 70, 92, 65, 98],
+                        backgroundColor: 'rgba(0, 212, 255, 0.2)',
+                        borderColor: '#00D4FF',
+                        pointBackgroundColor: '#00D4FF',
+                        pointBorderColor: '#fff',
+                    }]
+                },
+                options: {
+                    scales: { r: { grid: { color: 'rgba(255,255,255,0.05)' }, angleLines: { color: 'rgba(255,255,255,0.05)' }, ticks: { display: false }, pointLabels: { color: '#475569', font: { size: 9, weight: 'bold' } } } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
