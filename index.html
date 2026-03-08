@@ -387,32 +387,8 @@
                             class="text-xs font-black uppercase tracking-[0.2em] text-amber-500 mb-6 flex items-center gap-3">
                             <i data-lucide="target" class="w-5 h-5"></i> Evolution Gaps & Suggestions
                         </h2>
-                        <div class="space-y-4">
-                            <div
-                                class="bg-white/5 p-5 rounded-2xl border border-amber-500/10 flex justify-between items-center group transition-all">
-                                <div class="space-y-1 pr-12">
-                                    <div class="text-sm font-bold text-slate-100 uppercase tracking-tighter">Improvement
-                                        01: Tool Density</div>
-                                    <p class="text-xs text-slate-400 italic">"The JD mentions MATLAB/CAD 14 times. Your
-                                        CV only lists them twice in technical context."</p>
-                                </div>
-                                <span
-                                    class="badge-alert text-black text-[9px] px-3 py-1 rounded-full uppercase font-black tracking-widest whitespace-nowrap">Fix
-                                    Prompted</span>
-                            </div>
-                            <div
-                                class="bg-white/5 p-5 rounded-2xl border border-amber-500/10 flex justify-between items-center group transition-all">
-                                <div class="space-y-1 pr-12">
-                                    <div class="text-sm font-bold text-slate-100 uppercase tracking-tighter">Improvement
-                                        02: Educational Proof</div>
-                                    <p class="text-xs text-slate-400 italic">"Explicitly state your experience in
-                                        technical teaching or content creation to match 'Content Contributor'
-                                        requirement."</p>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <i data-lucide="lightbulb" class="text-amber-500 w-5 h-5"></i>
-                                </div>
-                            </div>
+                        <div class="space-y-4" id="gaps-list">
+                            <!-- Populated dynamically via JS -->
                         </div>
                     </div>
                 </div>
@@ -749,6 +725,74 @@ Alexis Paul Delich`;
             }
         }
 
+        function generateGaps(cvText, jdText) {
+            const masterSkills = [
+                { id: "MATLAB", name: "MATLAB" },
+                { id: "CAD", name: "CAD" },
+                { id: "PYTHON", name: "Python" },
+                { id: "AGILE", name: "Agile" },
+                { id: "LEAN", name: "Lean Manufacturing" },
+                { id: "SIX SIGMA", name: "Six Sigma" },
+                { id: "SQL", name: "SQL" },
+                { id: "AWS", name: "AWS Cloud" },
+                { id: "AZURE", name: "Azure" },
+                { id: "PROJECT MANAGEMENT", name: "Project Management" },
+                { id: "C++", name: "C++" },
+                { id: "ISO", name: "ISO Standards" },
+                { id: "DOCUMENTATION", name: "Technical Documentation" }
+            ];
+
+            const jdUpper = jdText.toUpperCase();
+            const cvUpper = cvText.toUpperCase();
+
+            let gaps = [];
+            let i = 1;
+
+            masterSkills.forEach(skill => {
+                if (jdUpper.includes(skill.id) && !cvUpper.includes(skill.id)) {
+                    gaps.push({
+                        title: `Improvement 0${i++}: Missing Skill '${skill.name}'`,
+                        desc: `The job description explicitly mentions ${skill.name}. Your CV currently does not highlight this. Ensure you provide examples or state your current learning path.`,
+                        type: 'fix'
+                    });
+                }
+            });
+
+            // If no clear gaps found from the master list, provide structural advice
+            if (gaps.length === 0) {
+                gaps.push({
+                    title: "Improvement 01: Metric Density",
+                    desc: "While your skills align, the JD emphasizes proven results. We suggest adding 2-3 specific KPIs or percentages to your recent roles.",
+                    type: 'idea'
+                });
+                gaps.push({
+                    title: "Improvement 02: Narrative Focus",
+                    desc: "Ensure your Executive Summary exactly mirrors the primary responsibilities listed in the Job Description requirements.",
+                    type: 'idea'
+                });
+            }
+
+            // Take max 3 gaps
+            gaps = gaps.slice(0, 3);
+
+            const gapsList = document.getElementById('gaps-list');
+            gapsList.innerHTML = gaps.map(gap => `
+                <div class="bg-white/5 p-5 rounded-2xl border ${gap.type === 'fix' ? 'border-amber-500/30' : 'border-cyan/30'} flex justify-between items-center group transition-all">
+                    <div class="space-y-1 pr-12">
+                        <div class="text-sm font-bold text-slate-100 uppercase tracking-tighter">${gap.title}</div>
+                        <p class="text-xs text-slate-400 italic">"${gap.desc}"</p>
+                    </div>
+                    ${gap.type === 'fix'
+                    ? `<span class="badge-alert text-black text-[9px] px-3 py-1 rounded-full uppercase font-black tracking-widest whitespace-nowrap">Fix Prompted</span>`
+                    : `<div class="flex items-center gap-2"><i data-lucide="lightbulb" class="${gap.type === 'fix' ? 'text-amber-500' : 'text-cyan'} w-5 h-5"></i></div>`
+                }
+                </div>
+            `).join('');
+
+            // Re-initialize icons for newly added content
+            setTimeout(() => { lucide.createIcons(); }, 100);
+        }
+
         function startProcessing() {
             const linkedin = document.getElementById('linkedin-url').value.trim();
             const cv = document.getElementById('cv-text').value.trim();
@@ -757,6 +801,11 @@ Alexis Paul Delich`;
                 alert("Critical Alignment Error: Provide Profile Data and Target Job Description.");
                 return;
             }
+
+            // Generate gap mock data
+            const profileData = cv + " " + linkedin;
+            generateGaps(profileData, jd);
+
             document.getElementById('intake-screen').classList.add('page-out');
             setTimeout(() => {
                 document.getElementById('intake-screen').classList.add('hidden');
